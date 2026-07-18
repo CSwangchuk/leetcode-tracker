@@ -1,1 +1,8 @@
-[{"title": "Array", "difficulty": "Easy", "topic": "Array", "date_solved": "2026-07-03"}]
+[
+    {
+        "title": "Palindrome",
+        "difficulty": "Hard",
+        "topic": "Stack",
+        "date_solved": "2026"
+    }
+]
