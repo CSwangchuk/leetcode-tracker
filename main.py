@@ -1,77 +1,5 @@
-import json
-import os 
-def save_problems(problems):
-    with open("problems.json", "w") as f:
-        json.dump(problems, f, indent=4)
-
-def load_problems():
-    if os.path.exists("problems.json"):
-        with open("problems.json", "r") as f:
-            content = f.read()
-            if content.strip() == "":
-                return []
-            else:
-                data = json.loads(content)
-                return data
-    else:
-        return []
-def add_problems(title,difficulty,topic,date_solved):
-    my_problems = load_problems()
-    new_problem = {
-        "title": title,
-        "difficulty": difficulty,
-        "topic": topic,
-        "date_solved": date_solved
-    }
-    my_problems.append(new_problem)
-    save_problems(my_problems)
-def summary():
-    problems = load_problems()
-    counts = {"Easy": 0, "Medium": 0, "Hard": 0}
-    for problem in problems:
-        if problem["difficulty"].lower() == "easy":
-            counts["Easy"] += 1
-        elif problem["difficulty"].lower() == "medium":
-            counts["Medium"] += 1
-        else:
-            counts["Hard"] += 1
-    return counts
-
-def topic_breakdown():
-    problems = load_problems()
-    topic_counts  = {}
-    for problem in problems:
-        topic = problem["topic"].lower()
-        if topic in topic_counts:
-            topic_counts[topic]+=1
-        else:
-            topic_counts[topic]=1
-    return topic_counts
-
-def view_all():
-    index = 1
-    problems = load_problems()
-    for problem in problems:
-        print(f"{index}.")
-        for key,value in problem.items():
-            print(f"{key}: {value}")
-        
-        print("")
-        index+=1
-def search(target):
-    problems = load_problems()
-    matches = []
-    for problem in problems:
-        if target.lower() in problem["title"].lower():
-            matches.append(problem)
-    return matches
-  
-    
-
-        
-
-
-
+from helpers import add_problems, summary, topic_breakdown, view_all, search, delete_problem, edit_problem, is_valid
+# this is the main menu of the tracker 
 def menu():
     while True:
         print("")
@@ -82,18 +10,23 @@ def menu():
     3.View Topic Breakdown
     4.View All Problems
     5.Search by Title
-    6.Quit""")
+    6.Delete Problem
+    7.Edit Problem
+    8.Quit""")
         print("")
 
         choice = input("Please enter your choice: ")
 
-        if choice=="1":
+        if choice == "1":
             title = input("What is the title of the problem : ")
-            difficulty = input("What is the difficulty level of the problem: ")
-            topic = input("What topic is the problem related to : ")
-            date_solved = input("When did you solve this problem")
-            add_problems(title,difficulty,topic,date_solved)
-            print("The problem has been added!")
+            difficulty = input("What is the difficulty (Easy / Medium / Hard): ")
+            if not is_valid(difficulty, ["Easy", "Medium", "Hard"]):
+                print("Invalid difficulty, please try again")
+            else:
+                topic = input("What topic is the problem related to : ")
+                date_solved = input("When did you solve this problem: ")
+                add_problems(title, difficulty, topic, date_solved)
+                print("The problem has been added!")
         elif choice == "2":
             summaries = summary()
             print("=== Summary ===")
@@ -109,17 +42,35 @@ def menu():
         elif choice =="5":
             user_input= input("Please input the title of the problem : ")
             ans = search(user_input)
-            match = False
             for i,elem in enumerate(ans):
                 print(f"{i+1}.")
                 for key,value in elem.items():
                     print(f"{key}: {value}")
-                    match = True
                 print("")
-            if not match:
+            if not ans:
                 print("No title found by that name, please try a vaild title")
-            
-        elif choice =="6":
+        elif choice == "6":
+            user_choice = input("Please enter the title of the problem you want to delete : ")
+            delete_problem(user_choice)
+        elif choice == "7":
+            ask = input("Enter the title of the problem you would like to edit : ")
+            print("What would you like to edit? (title / difficulty / topic / date_solved)")
+            target = input("Enter field: ")   
+            valid_fields = ["title", "difficulty", "topic", "date_solved"]
+            if not is_valid(target,valid_fields):
+                print("Invalid field, please try again")
+            else:
+                if target == "difficulty":
+                    change = input ("What is the new change : ")
+                    if not is_valid(change,["Easy","Medium","Hard"]):
+                        print("Invalid difficulty option,please try again")
+                    else:
+                        edit_problem(ask,target, change)
+                else:
+                    edit_problem(ask,target, change)
+                
+
+        elif choice =="8":
             print("Thank you for using the tracker, Goodbye")
             break
         else:

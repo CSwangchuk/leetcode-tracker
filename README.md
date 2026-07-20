@@ -10,6 +10,8 @@ so you can track your progress over time.
 - View a breakdown of problems by topic
 - Search a problem by its title
 - View all the problems added by the user
+- Delete a problem 
+- Edit a problem 
 
 ## How to Run
 python main.py
