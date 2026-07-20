@@ -8,6 +8,8 @@ so you can track your progress over time.
 - Add a solved problem (title, difficulty, topic, date)
 - View a summary of problems by difficulty (Easy/Medium/Hard)
 - View a breakdown of problems by topic
+- Search a problem by its title
+- View all the problems added by the user
 
 ## How to Run
 python main.py
