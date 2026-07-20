@@ -3,7 +3,7 @@ from helpers import add_problems, summary, topic_breakdown, view_all, search, de
 def menu():
     while True:
         print("")
-        print("*** LeetCode Tacker ***")
+        print("*** LeetCode Tracker ***")
         print("""
     1.Add a new problem
     2.View Summary
@@ -67,9 +67,8 @@ def menu():
                     else:
                         edit_problem(ask,target, change)
                 else:
+                    change = input ("What is the new change : ")
                     edit_problem(ask,target, change)
-                
-
         elif choice =="8":
             print("Thank you for using the tracker, Goodbye")
             break
